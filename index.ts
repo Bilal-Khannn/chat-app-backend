@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import prisma from './utils/prisma';
 import logger from './utils/logger';
 import authRoutes from './routes/authRoutes';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -10,6 +11,8 @@ const app: Express = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
+
+app.use(cors());
 
 app.use('/auth', authRoutes);
 
