@@ -26,9 +26,9 @@ export const signup = async (req: Request, res: Response) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser: User = await prisma.$queryRaw<User>`
-        INSERT INTO "User" (email, "displayName", username, password) 
+        INSERT INTO "User" (email, "display_name", username, password) 
         VALUES (${email}, ${displayName}, ${username}, ${hashedPassword})
-        RETURNING id, email, "displayName", username, password, "profilePicture"
+        RETURNING id, email, "display_name", username, password, "profile_picture"
     `;
         logger.info(`User registered successfully: ${newUser}`);
         res.status(200).json({
