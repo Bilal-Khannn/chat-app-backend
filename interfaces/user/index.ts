@@ -1,8 +1,8 @@
 export interface User {
     id: number;
     email: string;
-    displayName: string;
+    display_name: string;
     username: string;
     password: string;
-    profilePicture?: string | null;
+    profile_picture?: string | null;
 }

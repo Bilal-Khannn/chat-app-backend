@@ -2,8 +2,9 @@ import express, { Express, Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
 import prisma from './utils/prisma';
 import logger from './utils/logger';
-import authRoutes from './routes/authRoutes';
+import authRoutes from './routes/auth';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 
@@ -11,8 +12,14 @@ const app: Express = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use(cookieParser());
 
-app.use(cors());
+app.use(
+    cors({
+        origin: 'http://localhost:3000',
+        credentials: true
+    })
+);
 
 app.use('/auth', authRoutes);
 
