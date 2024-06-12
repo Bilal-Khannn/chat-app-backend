@@ -14,10 +14,53 @@ datasource db {
 }
 
 model User {
-  id      Int      @id @default(autoincrement())
-  email   String   @unique
+  id              Int     @id @default(autoincrement())
+  email           String  @unique
   display_name    String
-  username String @unique   // each user will have a unique username
-  password String
-  profile_picture String?  // to store profile picture url
+  username        String  @unique
+  password        String
+  profile_picture String?
+
+  messages     Message[]
+  groupMembers GroupMember[]
+  chats        Chat[]        @relation("ChatMembers")
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  content   String
+  timestamp DateTime @default(now())
+  senderId  Int
+  sender    User     @relation(fields: [senderId], references: [id])
+  chatId    Int
+  chat      Chat     @relation(fields: [chatId], references: [id])
+}
+
+model Chat {
+  id        Int        @id @default(autoincrement())
+  type      ChatType
+  messages  Message[]
+  members   User[]     @relation("ChatMembers")
+  GroupChat GroupChat?
+}
+
+model GroupChat {
+  id      Int           @id @default(autoincrement())
+  name    String
+  chatId  Int           @unique
+  chat    Chat          @relation(fields: [chatId], references: [id])
+  members GroupMember[]
+}
+
+model GroupMember {
+  id      Int       @id @default(autoincrement())
+  userId  Int
+  user    User      @relation(fields: [userId], references: [id])
+  groupId Int
+  group   GroupChat @relation(fields: [groupId], references: [id])
+}
+
+enum ChatType {
+  ONE_TO_ONE
+  GROUP
 }

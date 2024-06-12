@@ -76,8 +76,9 @@ export const signin = async (req: Request, res: Response) => {
 
         const token = generateToken({ id: user[0].id });
 
+        // make sure to change secure
         res.cookie('token', token, {
-            // httpOnly: true,
+            httpOnly: true,
             secure: process.env.NODE_ENV === 'production', // Set secure flag in production
             maxAge: 3600000 // 1 hour
         });
