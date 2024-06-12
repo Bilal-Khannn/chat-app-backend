@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import logger from '../../utils/logger';
+import { logger } from '../../utils/logger';
 import prisma from '../../utils/prisma';
 import { User } from '../../interfaces/user';
 import bcrypt from 'bcrypt';
@@ -104,7 +104,55 @@ export const signin = async (req: Request, res: Response) => {
     }
 };
 
-export const editProfile = (req: Request, res: Response) => {
-    console.log('hit the test route');
-    res.json({ message: 'Found the cookie' });
+export const signout = async (req: Request, res: Response) => {
+    try {
+        res.clearCookie('token', { httpOnly: true });
+
+        logger.info('User logged out successfully');
+        res.status(200).json({ message: 'Logout successful' });
+    } catch (error) {
+        logger.error('Error logging out user');
+        logger.error(error);
+        res.status(500).json({
+            message: 'Internal server error',
+            error: error
+        });
+    }
+};
+
+// this is used to get user info based on the id of the user extracted from token
+export const getUserInfo = async (req: Request, res: Response) => {
+    const userId = req.user?.id;
+
+    try {
+        const user: User[] = await prisma.$queryRaw`
+            SELECT * FROM "User" WHERE id = ${userId}
+        `;
+
+        if (!user) {
+            logger.warn(`User with ID ${userId} not found`);
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const formattedUser = {
+            id: user[0].id,
+            email: user[0].email,
+            displayName: user[0].display_name,
+            username: user[0].username,
+            profilePicture: user[0].profile_picture
+        };
+
+        logger.info(`Retrieved user with ID ${userId} successfully`);
+        res.status(200).json({
+            message: 'User session verified successfully',
+            data: formattedUser
+        });
+    } catch (error) {
+        logger.error(`Error retrieving user with ID ${userId}`);
+        logger.error(error);
+        res.status(500).json({
+            message: 'Internal server error',
+            error: error
+        });
+    }
 };

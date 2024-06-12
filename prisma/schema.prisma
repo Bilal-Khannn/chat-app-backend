@@ -51,8 +51,8 @@ model GroupChat {
   chat    Chat          @relation(fields: [chatId], references: [id])
   members GroupMember[]
 }
-
-model GroupMember {
+// fix this tommorow
+model ChatMember {
   id      Int       @id @default(autoincrement())
   userId  Int
   user    User      @relation(fields: [userId], references: [id])

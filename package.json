@@ -20,6 +20,7 @@
         "express": "^4.19.2",
         "jsonwebtoken": "^9.0.2",
         "sequelize": "^6.37.3",
+        "socket.io": "^4.7.5",
         "winston": "^3.13.0"
     },
     "devDependencies": {
