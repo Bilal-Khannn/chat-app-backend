@@ -22,8 +22,8 @@ model User {
   profile_picture String?
 
   messages     Message[]
-  groupMembers GroupMember[]
-  chats        Chat[]        @relation("ChatMembers")
+  groupMembers ChatMember[]
+  chats        Chat[]       @relation("ChatMembers")
 }
 
 model Message {
@@ -45,13 +45,13 @@ model Chat {
 }
 
 model GroupChat {
-  id      Int           @id @default(autoincrement())
+  id      Int          @id @default(autoincrement())
   name    String
-  chatId  Int           @unique
-  chat    Chat          @relation(fields: [chatId], references: [id])
-  members GroupMember[]
+  chatId  Int          @unique
+  chat    Chat         @relation(fields: [chatId], references: [id])
+  members ChatMember[]
 }
-// fix this tommorow
+
 model ChatMember {
   id      Int       @id @default(autoincrement())
   userId  Int

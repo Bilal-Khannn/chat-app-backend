@@ -23,10 +23,10 @@ export interface GroupChat {
     name: string;
     chatId: number;
     chat: Chat;
-    members: GroupMember[];
+    members: ChatMember[];
 }
 
-export interface GroupMember {
+export interface ChatMember {
     id: number;
     userId: number;
     user: User;

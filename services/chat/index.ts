@@ -1,6 +1,6 @@
 import prisma from '../../utils/prisma';
 import { User } from '../../interfaces/user';
-import { Chat } from '../../interfaces/chat';
+import { Chat, Message } from '../../interfaces/chat';
 
 export const createMessage = async (
     senderId: number,
@@ -8,7 +8,6 @@ export const createMessage = async (
     content: string
 ) => {
     try {
-        console.log('in here', senderId, receiverId);
         // Validate sender and receiver
         const sender: User[] =
             await prisma.$queryRaw`SELECT * FROM "User" WHERE id = ${senderId}`;

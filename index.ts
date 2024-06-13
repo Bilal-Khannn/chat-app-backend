@@ -1,11 +1,12 @@
 import express, { Express, Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
 import { createServer } from 'http';
-import { Server, Socket } from 'socket.io';
+import { Server } from 'socket.io';
 import prisma from './utils/prisma';
 import { logger } from './utils/logger';
 import authRoutes from './routes/auth';
 import userRoutes from './routes/user';
+import chatRoutes from './routes/chat';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import initializeSocketListener from './listeners';
@@ -38,6 +39,7 @@ app.use(
 
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
+app.use('/chat', chatRoutes);
 
 // Error handler middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

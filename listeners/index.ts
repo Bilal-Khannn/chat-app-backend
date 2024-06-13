@@ -7,7 +7,6 @@ export default function initializeSocketListener(io: Server) {
         logger.info('Socket connection successful');
 
         socket.on('chatMessage', async (message) => {
-            console.log('msg', message, typeof message);
             const { senderId, receiverId, content } = message;
 
             try {
