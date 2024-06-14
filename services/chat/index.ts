@@ -5,7 +5,8 @@ import { Chat, Message } from '../../interfaces/chat';
 export const createMessage = async (
     senderId: number,
     receiverId: number,
-    content: string
+    content: string,
+    isGroup?: boolean
 ) => {
     try {
         // Validate sender and receiver
@@ -48,12 +49,11 @@ export const createMessage = async (
             chatId = chat[0].id;
         }
 
-        // Create a new message in the chat
-        const message: string[] = await prisma.$queryRaw`
-        INSERT INTO "Message" (content, "senderId", "chatId", "timestamp")
-        VALUES (${content}, ${senderId}, ${chatId}, NOW())
-        RETURNING *
-      `;
+        const message: Message[] = await prisma.$queryRaw`
+    INSERT INTO "Message" (content, "senderId", "chatId", "timestamp")
+    VALUES (${content}, ${senderId}, ${chatId}, NOW())
+    RETURNING "Message".*, (SELECT "User"."display_name" FROM "User" WHERE "User"."id" = ${senderId}) AS "sender_name"
+  `;
 
         return message[0];
     } catch (error) {
